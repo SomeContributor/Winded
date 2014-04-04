@@ -23,6 +23,49 @@ namespace NorthWindSystem.BLL
             return dbContext.Customers.ToList();
         }
 
+        private NorthwindSystem.DataModels.Sales.Order GetCourseSection(int orderId)
+        {
+            NorthwindSystem.DataModels.Sales.Order myCourseSection;
+            var dbContext = new NorthwindSystem.DataModels.Sales.NorthwindSales();
+            myCourseSection = dbContext.Orders.Find(orderId);
+            return myCourseSection;
+        }
+
+        private List<NorthwindSystem.DataModels.Sales.Order_Detail> GetListOfStudents(int orderId)
+        {
+            var dbContext = new NorthwindSystem.DataModels.Sales.NorthwindSales();
+            List<NorthwindSystem.DataModels.Sales.Order_Detail> myListOfStudents = dbContext.Order_Details.Where(x => x.OrderID == orderId).ToList();
+            return myListOfStudents;
+        }
+
+        public List<OrderWithDetails> GetOrderWithDetails(int orderId)
+        {
+            var result = new List<OrderWithDetails>();
+
+            // get the order summary only
+            var myCourseSection = GetCourseSection(orderId);
+
+            List<NorthwindSystem.DataModels.Sales.Order_Detail> myListOfStudents = GetListOfStudents(orderId);
+
+
+            // Build my own custom objects
+            foreach (var item in myListOfStudents)
+            {
+                OrderWithDetails myItem = new OrderWithDetails();
+                // This information came from the SINGLE order object
+                myItem.OrderId = myCourseSection.OrderID;
+                myItem.OrderDate = myCourseSection.OrderDate;
+
+                // This information came from one of the items in the LIST of detail objects
+                myItem.Name = item.Product.ProductName;
+                myItem.ItemQty = item.Quantity;
+
+                result.Add(myItem);
+            }
+
+            return result;
+        }
+
         #region Queries for Reports
         /// <summary>
         /// 

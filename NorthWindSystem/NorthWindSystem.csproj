@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BLL\NorthwindManager.cs" />
     <Compile Include="CBOs\CustomerOrderSummary.cs" />
+    <Compile Include="CBOs\OrderWithDetails.cs" />
     <Compile Include="CBOs\ProductSaleSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
